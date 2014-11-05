@@ -13,11 +13,6 @@ struct midi_chunk
   char          magic[4];
   unsigned      length;
 
-  void set_track_magic()
-  {
-    strncpy(magic, "MTrk", 4);
-  }
-
   void write(std::ofstream &file) const
   {
     file.write(magic, 4);
@@ -73,9 +68,7 @@ public:
   void write(std::ofstream &file)
   {
     std::string data;
-    for (std::list<event*>::const_iterator it=events.begin();
-         it != events.end(); ++it)
-      data += (*it)->to_binary();
+    for (auto it : events) data += it->to_binary();
     if (not set_end_of_track) data += end_of_track().to_binary();
     length = data.size();
 
@@ -88,22 +81,20 @@ public:
 
   void add_event(event* e)
   {
-    if (e != NULL)
-      {
-        if (set_end_of_track) warning.print("warning: end_of_track event has been set.");
-        if (e->get_status_byte() == 0xFF)
-          {
-            meta_event *m = (meta_event *) e;
-            if (m->get_status_byte() == 0x2F)
-              {
-                set_end_of_track = true;
-              }
-          }
-        events.push_back(e);
+    if (e != NULL) {
+      if (set_end_of_track) warning.print("warning: end_of_track event has been set.");
+      if (e->get_status_byte() == 0xFF) {
+	meta_event *m = (meta_event *) e;
+	if (m->get_status_byte() == 0x2F) {
+	  set_end_of_track = true;
+	}
       }
+      events.push_back(e);
+    }
   }
 
   std::list<event*> events;
+
 private:
   bool set_end_of_track;
 };
@@ -119,19 +110,16 @@ midi_track midi_control_track()
 class midiFile
 {
 public:
-  midiFile()
-  {
-  }
-  midiFile(midi_head head, std::vector<midi_track> tracks)
-  {
-    this->head = head;
-    this->tracks = tracks;
-  }
+  midiFile() {}
+
+  midiFile(midi_head head, std::vector<midi_track> tracks): head(head), tracks(tracks) {}
+
   void add_track(midi_track track)
   {
     if (++head.ntrks > 1) head.format = 1;
     tracks.push_back(track);
   }
+
   void write_file(const char * const filepath)
   {
     std::ofstream file(filepath, std::ios::out | std::ios::binary);
@@ -139,18 +127,20 @@ public:
     for (int i=0; i < head.ntrks; ++i) tracks[i].write(file);
     file.close();
   }
+
   midi_head get_head() const
   {
     return head;
   }
+
   std::vector<midi_track> get_tracks() const
   {
     return tracks;
   }
+
 private:
   midi_head head;
   std::vector<midi_track> tracks;
 };
-
 
 #endif

@@ -15,8 +15,9 @@ public:
 
   void print()
   {
-    std::cout<<message<<std::endl;
+    std::cout << message << std::endl;
   }
+
 private:
   std::string message;
 };
