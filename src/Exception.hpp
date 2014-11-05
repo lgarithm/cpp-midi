@@ -8,17 +8,17 @@
 class Exception
 {
 public:
-	Exception(const char *str)
-	{
-		message = std::string(str);
-	}
+  Exception(const char *str)
+  {
+    message = std::string(str);
+  }
 
-	void print()
-	{
-		std::cout<<message<<std::endl;
-	}
+  void print()
+  {
+    std::cout<<message<<std::endl;
+  }
 private:
-	std::string message;
+  std::string message;
 };
 
 #endif
