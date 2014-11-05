@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 
 		midiFileReader reader;
 		midiAnalyser analyser;
-		
+
 		try
 		{
 			midiFile mfile = reader.read(argv[2]);
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 
 		return 0;
 	}
-	
+
 	printf("Unknow parameters\n");
 
 	return 0;

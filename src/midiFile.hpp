@@ -18,7 +18,7 @@ struct midi_chunk
 		strncpy(magic, "MTrk", 4);
 	}
 
-	void write(std::ofstream &file) const 
+	void write(std::ofstream &file) const
 	{
 		file.write(magic, 4);
 		unsigned buffer = length;
@@ -70,22 +70,22 @@ public:
 		set_end_of_track = false;
 	}
 
-	void write(std::ofstream &file)	
+	void write(std::ofstream &file)
 	{
 		std::string data;
-		for (std::list<event*>::const_iterator it=events.begin(); 
+		for (std::list<event*>::const_iterator it=events.begin();
 			it != events.end(); ++it)
 				data += (*it)->to_binary();
 		if (not set_end_of_track) data += end_of_track().to_binary();
 		length = data.size();
-		
+
 		file.write(magic, 4);
 		unsigned buffer = length;
 		reverse_byte_order(buffer);
 		file.write((char*) &buffer, 4);
 		file.write(data.c_str(), length);
 	}
-	
+
 	void add_event(event* e)
 	{
 		if (e != NULL)
@@ -117,7 +117,7 @@ midi_track midi_control_track()
 }
 
 class midiFile
-{	
+{
 public:
 	midiFile()
 	{

@@ -23,7 +23,7 @@ unsigned char* write_variable_length(unsigned value, unsigned char *&p)
       else
           break;
    }
-   
+
    return p;
 }
 

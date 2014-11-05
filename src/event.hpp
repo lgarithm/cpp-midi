@@ -33,7 +33,7 @@ public:
 public:
 	virtual unsigned get_length() const = 0;
 	virtual std::string to_binary() const = 0;
-	virtual unsigned char get_status_byte() const = 0;	
+	virtual unsigned char get_status_byte() const = 0;
 protected:
 	unsigned delta_time;
 	bool running;
@@ -64,7 +64,7 @@ public:
 	unary_midi_event(unsigned char param)
 	{
 		parameter = param;
-	}	
+	}
 	unary_midi_event(unsigned char param, unsigned char chan)
 	{
 		parameter = param;
@@ -159,11 +159,11 @@ public:
 	std::string to_text()
 	{
 		char str[260];
-		sprintf(str, "(%c)DT: %5d,   chan: 0x%02X,   note %3d(%3s) off,   velo: %3d", 
-			running ? 'r' : '*', 
-			delta_time, 
+		sprintf(str, "(%c)DT: %5d,   chan: 0x%02X,   note %3d(%3s) off,   velo: %3d",
+			running ? 'r' : '*',
+			delta_time,
 			channel,
-			first_parameter, note_name[first_parameter], 
+			first_parameter, note_name[first_parameter],
 			second_parameter
 		);
 		return str;
@@ -195,11 +195,11 @@ public:
 	std::string to_text()
 	{
 		char str[260];
-		sprintf(str, "(%c)DT: %5d,   chan: 0x%02X,   note %3d(%3s)  on,   velo: %3d", 
-			running ? 'r' : '*', 
+		sprintf(str, "(%c)DT: %5d,   chan: 0x%02X,   note %3d(%3s)  on,   velo: %3d",
+			running ? 'r' : '*',
 			delta_time,
 			channel,
-			first_parameter, note_name[first_parameter], 
+			first_parameter, note_name[first_parameter],
 			second_parameter
 		);
 		return str;
@@ -257,8 +257,8 @@ public:
 	std::string to_text()
 	{
 		char str[260];
-		sprintf(str, "(%c)DT: %5d,   chan: 0x%02X,   ctl %3d,   value: %3d", 
-			running ? 'r' : '*', 
+		sprintf(str, "(%c)DT: %5d,   chan: 0x%02X,   ctl %3d,   value: %3d",
+			running ? 'r' : '*',
 			delta_time,
 			channel,
 			first_parameter,
@@ -374,7 +374,7 @@ public:
 	{
 		unsigned char byte[16];
 		unsigned char *p = byte;
-		
+
 		write_variable_length(delta_time, p);
 		if (not running) *p++ = get_status_byte();
 		unsigned length = data.size();
@@ -447,7 +447,7 @@ public:
 	{
 		unsigned char byte[16];
 		unsigned char *p = byte;
-		
+
 		write_variable_length(delta_time, p);
 		if (not running) *p++ = get_status_byte();
 		*p++ = get_type();
@@ -459,9 +459,9 @@ public:
 	{
 		char str[260];
 		sprintf(str, "(%c)DT: %5d,   meta event,   type: 0x%02X(%s),   length: %d",
-			running ? 'r' : '*', 
-			delta_time, 
-			get_type(), 
+			running ? 'r' : '*',
+			delta_time,
+			get_type(),
 			meta_event_type_name[get_type()],
 			get_length()
 		);
@@ -671,7 +671,7 @@ public:
 	{
 		char str[260];
 		sprintf(str, "(%c)DT: %5d,   meta event,   end of track",
-			running ? 'r' : '*', 
+			running ? 'r' : '*',
 			delta_time
 		);
 		return str;
@@ -710,10 +710,10 @@ public:
 	{
 		char str[260];
 		sprintf(str, "(%c)DT: %5d,   meta event,   type: 0x%02X(%s),   MPQN: %d",
-			running ? 'r' : '*', 
-			delta_time, 
-			get_type(), 
-			meta_event_type_name[get_type()], 
+			running ? 'r' : '*',
+			delta_time,
+			get_type(),
+			meta_event_type_name[get_type()],
 			get_MPQN()
 		);
 		return str;
@@ -785,10 +785,10 @@ public:
 	{
 		char str[260];
 		sprintf(str, "(%c)DT: %5d,   meta event,   type: 0x%02X(%s),  [%02X %02X %02X %02X]",
-			running ? 'r' : '*', 
-			delta_time, 
-			get_type(), 
-			meta_event_type_name[get_type()], 
+			running ? 'r' : '*',
+			delta_time,
+			get_type(),
+			meta_event_type_name[get_type()],
 			numer, denom, denom, _32nds
 		);
 		return str;
@@ -826,9 +826,9 @@ public:
 	{
 		char str[260];
 		sprintf(str, "(%c)DT: %5d,   meta event,   type: 0x%02X(%s),   key: %d,   scale: %d",
-			running ? 'r' : '*', 
-			delta_time, 
-			get_type(), 
+			running ? 'r' : '*',
+			delta_time,
+			get_type(),
 			meta_event_type_name[get_type()],
 			key, scale
 		);

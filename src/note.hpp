@@ -12,7 +12,7 @@ class TimeLine
 {
 
 private:
-	
+
 };
 
 class Note
@@ -43,7 +43,7 @@ public:
 		midi_event *e = new note_off(pitch, midi::off_velo, chan);
 		e->set_delta_time(length);
 		dlt = 0;
-		return e;		
+		return e;
 	}
 private:
 	unsigned char pitch;
@@ -53,7 +53,7 @@ class PauseNote : public Note
 {
 public:
 	PauseNote(unsigned length)
-	{	
+	{
 		this->length = length;
 	}
 	event* note_on_event(unsigned &dlt, unsigned char chan)
@@ -94,7 +94,7 @@ public:
 		count['#'] = 0;
 		count['+'] = 0;
 		count['-'] = 0;
-		
+
 		register char ch;
 		while ((ch = next_char()) != 0)
 		{
@@ -102,8 +102,8 @@ public:
 
 			if ('1' <= ch && ch <= '7')
 			{
-				int pitch = basic_note_number[ch - '1'] 
-						+ (count['+'] - count['-'] + count['?'] - count['!']) * 12 
+				int pitch = basic_note_number[ch - '1']
+						+ (count['+'] - count['-'] + count['?'] - count['!']) * 12
 						+ count['#'] + count['>'] - count['<'];
 				if (pitch < 0 || 127 < pitch)
 				{
@@ -121,7 +121,7 @@ public:
 				for (int x = length >> 1; count['.']-- > 0; x >>= 1) length += x;
 				return new PauseNote(length);
 			}
-			
+
 			++count[ch];
 		}
 	}

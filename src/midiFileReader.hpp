@@ -23,7 +23,7 @@ public:
 		if (not file) throw Exception("can not open file exception.");
 		if (not check_midi_file(file)) throw Exception("bad midi file exception.");
 		file.seekg(0, std::ios::beg);
-		
+
 		midi_head head;
 		file.read((char*) &head, 14);
 		reverse_byte_order(head.length);
@@ -50,7 +50,7 @@ public:
 		}
 
 		file.close();
-		
+
 		return midiFile(head, tracks);
 	}
 private:
@@ -91,7 +91,7 @@ private:
 	{
 		unsigned char* byte = new unsigned char[track.length];
 		file.read((char*) byte, track.length);
-		
+
 		unsigned char status_byte = 0;
 
 #ifdef __DEBUG__
@@ -121,7 +121,7 @@ private:
 			}
 			if (running) e->running_on();
 			e->set_delta_time(delta_time);
-			
+
 			track.add_event(e);
 
 #ifdef __DEBUG__
@@ -160,7 +160,7 @@ private:
 				throw Exception("status byte exception 2: unknown status byte 0xF[12345689ABCDE] exception.");
 				break;
 		}
-		
+
 		e->set_channel(chan);
 		p += e->get_length();
 		return e;
@@ -171,8 +171,8 @@ private:
 	{
 // std::cout<<"(sysex event)";
 		unsigned length = read_variable_length(p);
-		sysex_event* e = NULL;		
-		//* todo 
+		sysex_event* e = NULL;
+		//* todo
 		// switch (status_byte)
 		// {
 			// case 0xF0:
@@ -192,7 +192,7 @@ private:
 		unsigned char type = *p++;
 		unsigned length = read_variable_length(p);
 		meta_event* e = NULL;
-		
+
 		switch (type)
 		{
 			case 0x00: e = new sequence_number(p[0], p[1]);
@@ -230,7 +230,7 @@ private:
 				warning.print("warning: meta event type exception");
 				break;
 		}
-		
+
 		p += length;
 		return e;
 	}

@@ -14,7 +14,7 @@ public:
 	{
 		midi_head head = file.get_head();
 		std::vector<midi_track> tracks = file.get_tracks();
-		
+
 		std::cout<<"format: "<<head.format<<std::endl;
 		std::cout<<"ntrks: "<<head.ntrks<<std::endl;
 		std::cout<<"division: "<<head.division<<std::endl;
@@ -22,7 +22,7 @@ public:
 		for (int track_id=0; track_id < head.ntrks; ++track_id)
 		{
 			std::cout<<"track "<<track_id + 1<<", length: "<<tracks[track_id].length<<std::endl;
-			
+
 			int count = 0;
 			for (std::list<event *>::const_iterator it = tracks[track_id].events.begin();
 				it != tracks[track_id].events.end(); ++it)

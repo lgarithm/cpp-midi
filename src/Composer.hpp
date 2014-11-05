@@ -35,7 +35,7 @@ public:
 
 		midiFile midi;
 		midi.add_track(midi_control_track());
-		
+
 		int tc = 0;
 		for (std::list<std::string>::iterator it = ss.begin(); it != ss.end(); ++it)
 			midi.add_track(Sequence(*it).to_track(tc++));

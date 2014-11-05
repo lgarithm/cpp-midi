@@ -54,7 +54,7 @@ public:
 		track.add_event(new program_change(prog_num, chan));
 
 		unsigned dlt = 0;
-		for (std::list<Note *>::iterator it=notes.begin(); 
+		for (std::list<Note *>::iterator it=notes.begin();
 			it != notes.end(); ++it)
 		{
 			track.add_event((*it)->note_on_event(dlt, chan));
