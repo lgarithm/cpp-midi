@@ -5,7 +5,7 @@
 
 unsigned char* write_variable_length(unsigned value, unsigned char *&p)
 {
-  register unsigned buffer;
+  unsigned buffer;
   buffer = value & 0x7F;
 
   while ( value >>= 7 )
@@ -29,7 +29,7 @@ unsigned char* write_variable_length(unsigned value, unsigned char *&p)
 
 void write_variable_length(unsigned value, std::string &buffer)
 {
-  register unsigned tmp = value & 0x7F;
+  unsigned tmp = value & 0x7F;
   while (value >>= 7)
     {
       tmp <<= 8;
@@ -46,8 +46,8 @@ void write_variable_length(unsigned value, std::string &buffer)
 
 unsigned read_variable_length(const unsigned char *&p)
 {
-  register unsigned value;
-  register unsigned char c;
+  unsigned value;
+  unsigned char c;
 
   if ((value = *p++) & 0x80)
     {

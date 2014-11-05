@@ -95,7 +95,7 @@ public:
     count['+'] = 0;
     count['-'] = 0;
 
-    register char ch;
+    char ch;
     while ((ch = next_char()) != 0)
       {
         if (ch == '$') return NULL;

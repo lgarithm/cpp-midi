@@ -845,7 +845,7 @@ public:
 private:
   std::string get_data() const
   {
-    unsigned char byte[2] = {key, scale};
+    unsigned char byte[2] = {(unsigned char) key, (unsigned char) scale};
     return std::string(byte, byte + 2);
   }
 private:

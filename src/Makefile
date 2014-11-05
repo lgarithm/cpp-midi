@@ -1,4 +1,4 @@
 
 midi:
 	mkdir -p ../bin
-	g++ midi.cpp -o ../bin/midi
+	g++ midi.cpp -std=c++0x -o ../bin/midi
