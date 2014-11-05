@@ -19,18 +19,15 @@ public:
     buffer.clear();
 
     char ch;
-    while ((ch = fgetc(fp)) != EOF)
-      {
-        if (ch == '$')
-          {
-            ss.push_back(buffer);
-            buffer.clear();
-          }
-        else
-          {
-            buffer.push_back(ch);
-          }
+    while ((ch = fgetc(fp)) != EOF) {
+      if (ch == '$') {
+	ss.push_back(buffer);
+	buffer.clear();
       }
+      else {
+	buffer.push_back(ch);
+      }
+    }
     if (!buffer.empty()) ss.push_back(buffer);
 
     midiFile midi;
@@ -42,6 +39,7 @@ public:
 
     return midi;
   }
+
 private:
   std::list<std::string> ss;
   std::string buffer;
