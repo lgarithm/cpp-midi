@@ -150,10 +150,10 @@ const char meta_event_type_name[128][40] = {
 
 namespace midi
 {
-const unsigned char off_type	= 0x80;
-const unsigned char on_type		= 0x90;
-const unsigned char	on_velo		= 0x64;
-const unsigned char	off_velo	= 0x00;
+const unsigned char off_type    = 0x80;
+const unsigned char on_type             = 0x90;
+const unsigned char     on_velo         = 0x64;
+const unsigned char     off_velo        = 0x00;
 
 static unsigned beat = 960; /* 32*30 */
 

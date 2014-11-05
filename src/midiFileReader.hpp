@@ -40,13 +40,13 @@ public:
     std::vector<midi_track> tracks(head.ntrks);
     for (int track_id=0; track_id < head.ntrks; ++track_id)
       {
-	file.read((char*) &tracks[track_id], 8);
-	reverse_byte_order(tracks[track_id].length);
+        file.read((char*) &tracks[track_id], 8);
+        reverse_byte_order(tracks[track_id].length);
 
 #ifdef __DEBUG__
-	std::cout<<"track "<<track_id + 1<<": length: "<<tracks[track_id].length<<std::endl;
+        std::cout<<"track "<<track_id + 1<<": length: "<<tracks[track_id].length<<std::endl;
 #endif
-	get_events(file, tracks[track_id]);
+        get_events(file, tracks[track_id]);
       }
 
     file.close();
@@ -63,24 +63,24 @@ private:
     bool first_chunk = true;
     while (file.tellg() != end_pos)
       {
-	midi_chunk chunk;
-	if (!file.read((char*) &chunk, 8)) return false;
-	if (first_chunk)
-	  {
-	    first_chunk = false;
-	    if (strncmp(chunk.magic, "MThd", 4) != 0) return false;
-	  }
-	else
-	  {
-	    if (strncmp(chunk.magic, "MTrk", 4) != 0) return false;
-	  }
+        midi_chunk chunk;
+        if (!file.read((char*) &chunk, 8)) return false;
+        if (first_chunk)
+          {
+            first_chunk = false;
+            if (strncmp(chunk.magic, "MThd", 4) != 0) return false;
+          }
+        else
+          {
+            if (strncmp(chunk.magic, "MTrk", 4) != 0) return false;
+          }
 
-	unsigned length = get_reversed_value(chunk.length);
-	if (length > rest) return false;
-	rest -= length;
+        unsigned length = get_reversed_value(chunk.length);
+        if (length > rest) return false;
+        rest -= length;
 
-	file.seekg(length, std::ios::cur);
-	if (file.fail()) return false;
+        file.seekg(length, std::ios::cur);
+        if (file.fail()) return false;
       }
 
     return true;
@@ -101,31 +101,31 @@ private:
     for (const unsigned char* p = byte; p < byte + track.length; )
       {
 #ifdef __DEBUG__
-	std::cout<<++cc<<":";
+        std::cout<<++cc<<":";
 #endif
-	unsigned delta_time = read_variable_length(p);
-	bool running = false;
-	p[0] < 0x80 ? running = true : status_byte = *p++;
-	if (status_byte < 0x80) throw Exception("status byte exception 1: status byte < 0x80.");
+        unsigned delta_time = read_variable_length(p);
+        bool running = false;
+        p[0] < 0x80 ? running = true : status_byte = *p++;
+        if (status_byte < 0x80) throw Exception("status byte exception 1: status byte < 0x80.");
 
-	event* e = NULL;
-	switch (status_byte)
-	  {
-	  case 0xF0:
-	  case 0xF7: e = get_sysex_event(status_byte, p);
-	    break;
-	  case 0xFF: e = get_meta_event(status_byte, p);
-	    break;
-	  default: e = get_midi_event(status_byte, p);
-	    break;
-	  }
-	if (running) e->running_on();
-	e->set_delta_time(delta_time);
+        event* e = NULL;
+        switch (status_byte)
+          {
+          case 0xF0:
+          case 0xF7: e = get_sysex_event(status_byte, p);
+            break;
+          case 0xFF: e = get_meta_event(status_byte, p);
+            break;
+          default: e = get_midi_event(status_byte, p);
+            break;
+          }
+        if (running) e->running_on();
+        e->set_delta_time(delta_time);
 
-	track.add_event(e);
+        track.add_event(e);
 
 #ifdef __DEBUG__
-	std::cout<<std::endl;
+        std::cout<<std::endl;
 #endif
       }
 
@@ -142,23 +142,23 @@ private:
     switch (type)
       {
       case 0x80: e = new note_off(p[0], p[1]);
-	break;
+        break;
       case 0x90: e = new note_on(p[0], p[1]);
-	break;
+        break;
       case 0xA0: e = new note_aftertouch(p[0], p[1]);
-	break;
+        break;
       case 0xB0: e = new controller(p[0], p[1]);
-	break;
+        break;
       case 0xC0: e = new program_change(p[0]);
-	break;
+        break;
       case 0xD0: e = new channel_aftertouch(p[0]);
-	break;
+        break;
       case 0xE0: e = new pitch_bend(p[0], p[1]);
-	break;
+        break;
 
       default:
-	throw Exception("status byte exception 2: unknown status byte 0xF[12345689ABCDE] exception.");
-	break;
+        throw Exception("status byte exception 2: unknown status byte 0xF[12345689ABCDE] exception.");
+        break;
       }
 
     e->set_channel(chan);
@@ -196,39 +196,39 @@ private:
     switch (type)
       {
       case 0x00: e = new sequence_number(p[0], p[1]);
-	break;
+        break;
       case 0x01: e = new text_event(length, p);
-	break;
+        break;
       case 0x02: e = new copyriht_notice(length, p);
-	break;
+        break;
       case 0x03: e = new sequence_or_track_name(length, p);
-	break;
+        break;
       case 0x04: e = new instrument_name(length, p);
-	break;
+        break;
       case 0x05: e = new lyrics(length, p);
-	break;
+        break;
       case 0x06: e = new marker(length, p);
-	break;
+        break;
       case 0x07: e = new cue_point(length, p);
-	break;
+        break;
       case 0x20: e = new midi_channel_prefix(p[0]);
-	break;
+        break;
       case 0x2F: e = new end_of_track();
-	break;
+        break;
       case 0x51: e = new set_tempo(p);
-	break;
+        break;
       case 0x54: e = new smpte_offset(p);
-	break;
+        break;
       case 0x58: e = new time_signature(p[0], p[1], p[2], p[3]);
-	break;
+        break;
       case 0x59: e = new key_signature(p[0], p[1]);
-	break;
+        break;
       case 0x7F: e = new sequence_specific(length, p);
-	break;
+        break;
 
       default: e = new unknown_meta_event(type, length, p);
-	warning.print("warning: meta event type exception");
-	break;
+        warning.print("warning: meta event type exception");
+        break;
       }
 
     p += length;

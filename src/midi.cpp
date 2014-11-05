@@ -1,7 +1,7 @@
 
 #include <cstdio>
 
-// #define	__DEBUG__
+// #define      __DEBUG__
 
 #include "midiFileReader.hpp"
 #include "midiAnalyser.hpp"
@@ -24,23 +24,23 @@ int main(int argc, char *argv[])
   if (strcmp(argv[1], "-a") == 0)
     {
       if (argc < 3)
-	{
-	  printf("missing file name\n");
-	  return 0;
-	}
+        {
+          printf("missing file name\n");
+          return 0;
+        }
 
       midiFileReader reader;
       midiAnalyser analyser;
 
       try
-	{
-	  midiFile mfile = reader.read(argv[2]);
-	  analyser.analyse(mfile);
-	}
+        {
+          midiFile mfile = reader.read(argv[2]);
+          analyser.analyse(mfile);
+        }
       catch(Exception e)
-	{
-	  e.print();
-	}
+        {
+          e.print();
+        }
 
       return 0;
     }

@@ -19,9 +19,9 @@ unsigned char* write_variable_length(unsigned value, unsigned char *&p)
       *p++ = buffer & 0xFF;
 
       if (buffer & 0x80)
-	buffer >>= 8;
+        buffer >>= 8;
       else
-	break;
+        break;
     }
 
   return p;
@@ -53,9 +53,9 @@ unsigned read_variable_length(const unsigned char *&p)
     {
       value &= 0x7F;
       do
-	{
-	  value = (value << 7) + ((c = *p++) & 0x7F);
-	} while (c & 0x80);
+        {
+          value = (value << 7) + ((c = *p++) & 0x7F);
+        } while (c & 0x80);
     }
 
   return value;

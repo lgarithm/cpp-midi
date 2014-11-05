@@ -160,12 +160,12 @@ public:
   {
     char str[260];
     sprintf(str, "(%c)DT: %5d,   chan: 0x%02X,   note %3d(%3s) off,   velo: %3d",
-	    running ? 'r' : '*',
-	    delta_time,
-	    channel,
-	    first_parameter, note_name[first_parameter],
-	    second_parameter
-	    );
+            running ? 'r' : '*',
+            delta_time,
+            channel,
+            first_parameter, note_name[first_parameter],
+            second_parameter
+            );
     return str;
   }
   unsigned char get_note_number()
@@ -196,12 +196,12 @@ public:
     {
       char str[260];
       sprintf(str, "(%c)DT: %5d,   chan: 0x%02X,   note %3d(%3s)  on,   velo: %3d",
-	      running ? 'r' : '*',
-	      delta_time,
-	      channel,
-	      first_parameter, note_name[first_parameter],
-	      second_parameter
-	      );
+              running ? 'r' : '*',
+              delta_time,
+              channel,
+              first_parameter, note_name[first_parameter],
+              second_parameter
+              );
       return str;
     }
     unsigned char get_note_number()
@@ -258,12 +258,12 @@ public:
   {
     char str[260];
     sprintf(str, "(%c)DT: %5d,   chan: 0x%02X,   ctl %3d,   value: %3d",
-	    running ? 'r' : '*',
-	    delta_time,
-	    channel,
-	    first_parameter,
-	    second_parameter
-	    );
+            running ? 'r' : '*',
+            delta_time,
+            channel,
+            first_parameter,
+            second_parameter
+            );
     return str;
   }
   unsigned char get_controller_number()
@@ -295,10 +295,10 @@ public:
   {
     char str[260];
     sprintf(str, "(%c)DT: %5d,   chan: 0x%02X,   program change, program number: %d",
-	    running ? 'r' : '*',
-	    delta_time,
-	    channel,
-	    parameter);
+            running ? 'r' : '*',
+            delta_time,
+            channel,
+            parameter);
     return str;
   }
   unsigned char get_program_number()
@@ -358,7 +358,7 @@ public:
 };
 
 
-class sysex_event : public event	//0xF0, 0xF7
+class sysex_event : public event        //0xF0, 0xF7
 {
 public:
   sysex_event(unsigned char status_byte, unsigned length, const unsigned char * const p)
@@ -396,7 +396,7 @@ protected:
 };
 
 /*
-  class normal_sysex_event : public sysex_event	//0xF0, the data ends with 0xF7
+  class normal_sysex_event : public sysex_event //0xF0, the data ends with 0xF7
   {
   private:
   unsigned char get_status_byte()
@@ -405,7 +405,7 @@ protected:
   }
   };
 
-  class divided_sysex_event_head : public sysex_event	//0xF0
+  class divided_sysex_event_head : public sysex_event   //0xF0
   {
   private:
   unsigned char get_status_byte()
@@ -414,7 +414,7 @@ protected:
   }
   };
 
-  class divided_sysex_event_body : public sysex_event	//0xF7{
+  class divided_sysex_event_body : public sysex_event   //0xF7{
   private:
   unsigned char get_status_byte()
   {
@@ -422,7 +422,7 @@ protected:
   }
   };
 
-  class divided_sysex_event_tail : public sysex_event	//0xF7, the data ends with 0xF7{
+  class divided_sysex_event_tail : public sysex_event   //0xF7, the data ends with 0xF7{
   private:
   unsigned char get_status_byte()
   {
@@ -430,7 +430,7 @@ protected:
   }
   };
 
-  class authorization_sysex_event : public sysex_event	//0xF7
+  class authorization_sysex_event : public sysex_event  //0xF7
   {
   private:
   unsigned char get_status_byte()
@@ -459,12 +459,12 @@ public:
   {
     char str[260];
     sprintf(str, "(%c)DT: %5d,   meta event,   type: 0x%02X(%s),   length: %d",
-	    running ? 'r' : '*',
-	    delta_time,
-	    get_type(),
-	    meta_event_type_name[get_type()],
-	    get_length()
-	    );
+            running ? 'r' : '*',
+            delta_time,
+            get_type(),
+            meta_event_type_name[get_type()],
+            get_length()
+            );
     return str;
   }
   unsigned char get_status_byte() const
@@ -529,7 +529,7 @@ public:
   {
     MSB = msb;
     LSB = lsb;
-  }	unsigned char get_type() const
+  }   unsigned char get_type() const
   {
     return 0x00;
   }
@@ -671,9 +671,9 @@ public:
   {
     char str[260];
     sprintf(str, "(%c)DT: %5d,   meta event,   end of track",
-	    running ? 'r' : '*',
-	    delta_time
-	    );
+            running ? 'r' : '*',
+            delta_time
+            );
     return str;
   }
   unsigned char get_type() const
@@ -710,12 +710,12 @@ public:
   {
     char str[260];
     sprintf(str, "(%c)DT: %5d,   meta event,   type: 0x%02X(%s),   MPQN: %d",
-	    running ? 'r' : '*',
-	    delta_time,
-	    get_type(),
-	    meta_event_type_name[get_type()],
-	    get_MPQN()
-	    );
+            running ? 'r' : '*',
+            delta_time,
+            get_type(),
+            meta_event_type_name[get_type()],
+            get_MPQN()
+            );
     return str;
   }
   unsigned get_MPQN()
@@ -785,12 +785,12 @@ public:
   {
     char str[260];
     sprintf(str, "(%c)DT: %5d,   meta event,   type: 0x%02X(%s),  [%02X %02X %02X %02X]",
-	    running ? 'r' : '*',
-	    delta_time,
-	    get_type(),
-	    meta_event_type_name[get_type()],
-	    numer, denom, denom, _32nds
-	    );
+            running ? 'r' : '*',
+            delta_time,
+            get_type(),
+            meta_event_type_name[get_type()],
+            numer, denom, denom, _32nds
+            );
     return str;
   }
   unsigned char get_type() const
@@ -826,12 +826,12 @@ public:
   {
     char str[260];
     sprintf(str, "(%c)DT: %5d,   meta event,   type: 0x%02X(%s),   key: %d,   scale: %d",
-	    running ? 'r' : '*',
-	    delta_time,
-	    get_type(),
-	    meta_event_type_name[get_type()],
-	    key, scale
-	    );
+            running ? 'r' : '*',
+            delta_time,
+            get_type(),
+            meta_event_type_name[get_type()],
+            key, scale
+            );
     return str;
   }
   unsigned char get_type() const

@@ -55,10 +55,10 @@ public:
 
     unsigned dlt = 0;
     for (std::list<Note *>::iterator it=notes.begin();
-	 it != notes.end(); ++it)
+         it != notes.end(); ++it)
       {
-	track.add_event((*it)->note_on_event(dlt, chan));
-	track.add_event((*it)->note_off_event(dlt, chan));
+        track.add_event((*it)->note_on_event(dlt, chan));
+        track.add_event((*it)->note_off_event(dlt, chan));
       }
 
     // track.add_event(new controller(127, 0, chan));

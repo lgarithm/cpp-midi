@@ -21,17 +21,17 @@ public:
     std::cout<<std::endl;
     for (int track_id=0; track_id < head.ntrks; ++track_id)
       {
-	std::cout<<"track "<<track_id + 1<<", length: "<<tracks[track_id].length<<std::endl;
+        std::cout<<"track "<<track_id + 1<<", length: "<<tracks[track_id].length<<std::endl;
 
-	int count = 0;
-	for (std::list<event *>::const_iterator it = tracks[track_id].events.begin();
-	     it != tracks[track_id].events.end(); ++it)
-	  {
-	    std::cout<<std::setw(5)<<++count<<": ";
-	    std::cout<<(*it)->to_text();
-	    std::cout<<std::endl;
-	  }
-	std::cout<<std::endl;
+        int count = 0;
+        for (std::list<event *>::const_iterator it = tracks[track_id].events.begin();
+             it != tracks[track_id].events.end(); ++it)
+          {
+            std::cout<<std::setw(5)<<++count<<": ";
+            std::cout<<(*it)->to_text();
+            std::cout<<std::endl;
+          }
+        std::cout<<std::endl;
       }
   }
 };

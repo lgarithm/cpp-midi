@@ -21,7 +21,7 @@ public:
   {
     if (noisy)
       {
-	fprintf(f, "%s\n", s);
+        fprintf(f, "%s\n", s);
       }
   }
   void on()

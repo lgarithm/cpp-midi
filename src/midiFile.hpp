@@ -10,8 +10,8 @@
 
 struct midi_chunk
 {
-  char		magic[4];
-  unsigned	length;
+  char          magic[4];
+  unsigned      length;
 
   void set_track_magic()
   {
@@ -29,9 +29,9 @@ struct midi_chunk
 
 struct midi_head : public midi_chunk
 {
-  unsigned short	format;
-  unsigned short	ntrks;
-  unsigned short	division;
+  unsigned short        format;
+  unsigned short        ntrks;
+  unsigned short        division;
 
   midi_head()
   {
@@ -74,7 +74,7 @@ public:
   {
     std::string data;
     for (std::list<event*>::const_iterator it=events.begin();
-	 it != events.end(); ++it)
+         it != events.end(); ++it)
       data += (*it)->to_binary();
     if (not set_end_of_track) data += end_of_track().to_binary();
     length = data.size();
@@ -90,16 +90,16 @@ public:
   {
     if (e != NULL)
       {
-	if (set_end_of_track) warning.print("warning: end_of_track event has been set.");
-	if (e->get_status_byte() == 0xFF)
-	  {
-	    meta_event *m = (meta_event *) e;
-	    if (m->get_status_byte() == 0x2F)
-	      {
-		set_end_of_track = true;
-	      }
-	  }
-	events.push_back(e);
+        if (set_end_of_track) warning.print("warning: end_of_track event has been set.");
+        if (e->get_status_byte() == 0xFF)
+          {
+            meta_event *m = (meta_event *) e;
+            if (m->get_status_byte() == 0x2F)
+              {
+                set_end_of_track = true;
+              }
+          }
+        events.push_back(e);
       }
   }
 
