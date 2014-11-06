@@ -81,15 +81,28 @@ private:
 class NoteReader
 {
 public:
-  NoteReader(const char * str)
+  NoteReader(const std::string& s):
+    buffer(s), iter(buffer.begin()), buffer_end(buffer.end()),
+    note(NULL), parsed(false), end(false)
   {
     count['?'] = 0;
     count['!'] = 0;
     count['>'] = 0;
     count['<'] = 0;
-    int n = strlen(str);
-    for (int i=0; i < n; ++i) buffer.push(str[i]);
-    buffer.push(0);
+  }
+
+  void operator ++()
+  {
+    this->operator*();
+  }
+
+  Note* operator*()
+  {
+    if (not parsed) {
+      note = get_note();
+      parsed = true;
+    }
+    return note;
   }
 
   Note *get_note()
@@ -101,48 +114,47 @@ public:
     count['+'] = 0;
     count['-'] = 0;
 
-    char ch;
-    while ((ch = next_char()) != 0)
-      {
-        if (ch == '$') return NULL;
+    while (iter != buffer_end) {
+      char ch = *iter++;
 
-        if ('1' <= ch && ch <= '7') {
-	  int pitch = basic_note_number[ch - '1']
-	    + (count['+'] - count['-'] + count['?'] - count['!']) * 12
-	    + count['#'] + count['>'] - count['<'];
-	  if (pitch < 0 || 127 < pitch) {
-	    fprintf(stderr, "Bad note, out of range!\n");
-	    return NULL;
-	  }
-
-	  int length = (midi::beat << count['^']) >> count['_'];
-	  for (int x = length >> 1; count['.']-- > 0; x >>= 1) length += x;
-	  return new MusicNote(length, pitch);
-	}
-
-        if (ch == 's') {
-	  int length = (midi::beat << count['^']) >> count['_'];
-	  for (int x = length >> 1; count['.']-- > 0; x >>= 1) length += x;
-	  return new PauseNote(length);
-	}
-
-        ++count[ch];
+      if (ch == '$') {
+        end = true;
+        return NULL;
       }
+
+      if ('1' <= ch && ch <= '7') {
+        int pitch = basic_note_number[ch - '1']
+          + (count['+'] - count['-'] + count['?'] - count['!']) * 12
+          + count['#'] + count['>'] - count['<'];
+        if (pitch < 0 || 127 < pitch) {
+          fprintf(stderr, "Bad note, out of range!\n");
+          return NULL;
+        }
+        int length = (midi::beat << count['^']) >> count['_'];
+        for (int x = length >> 1; count['.']-- > 0; x >>= 1) length += x;
+        return new MusicNote(length, pitch);
+      }
+
+      if (ch == 's') {
+        int length = (midi::beat << count['^']) >> count['_'];
+        for (int x = length >> 1; count['.']-- > 0; x >>= 1) length += x;
+        return new PauseNote(length);
+      }
+      ++count[ch];
+    }
 
     return NULL;
   }
 
 private:
-  char next_char()
-  {
-    char tmp = buffer.front();
-    buffer.pop();
-    return tmp;
-  }
-
-private:
   char count[256];
-  std::queue<char> buffer;
+  const std::string buffer;
+  std::string::const_iterator iter;
+  std::string::const_iterator buffer_end;
+
+  Note* note;
+  bool parsed;
+  bool end;
 };
 
 #endif

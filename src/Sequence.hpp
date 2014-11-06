@@ -9,22 +9,10 @@
 class Sequence
 {
 public:
-  Sequence(const std::string &score)
-  {
-    NoteReader in(score.c_str());
-    for (Note *note; (note = in.get_note()) != NULL; ) notes.push_back(note);
-
-    channel = 0;
-    program_number = 0;
-  }
-
-  Sequence(const char *score)
+  Sequence(const std::string &score): channel(0), program_number(0)
   {
     NoteReader in(score);
     for (Note *note; (note = in.get_note()) != NULL; ) notes.push_back(note);
-
-    channel = 0;
-    program_number = 0;
   }
 
   void set_channel(unsigned char chan)
