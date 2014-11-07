@@ -9,6 +9,8 @@
 class Composer
 {
 public:
+  Composer(unsigned char bpm = 120): bpm(bpm) {}
+
   midiFile compose(const char* filename)
   {
     std::ifstream in(filename);
@@ -34,7 +36,7 @@ public:
     if (!buffer.empty()) ss.push_back(buffer);
 
     midiFile midi;
-    midi.add_track(midi_control_track());
+    midi.add_track(midi_control_track(bpm));
 
     int tc = 0;
     for (auto it : ss) {
@@ -42,6 +44,9 @@ public:
     }
     return midi;
   }
+
+private:
+  unsigned char bpm;
 };
 
 #endif

@@ -100,10 +100,9 @@ private:
 };
 
 
-midi_track midi_control_track()
+midi_track midi_control_track(unsigned char bpm = 120)
 {
   midi_track track;
-  unsigned char bpm = 56;
   track.add_event(new set_tempo(60000000 / bpm));
   track.add_event(new time_signature(0x04, 0x02, 0x02, 0x08));
   return track;
