@@ -95,12 +95,10 @@ public:
       char ch = *iter++;
       if (ch == '$') return NULL;
       if ('1' <= ch && ch <= '7') {
-	int p = pitch(ch);
-        if (p < 0 || 127 < p) {
-          fprintf(stderr, "Bad note, out of range!\n");
-          return NULL;
-        }
-        return new MusicNote(length(), p);
+        int p = pitch(ch);
+        if (0 <= p and p <= 127) return new MusicNote(length(), p);
+        fprintf(stderr, "Bad note, out of range!\n");
+        return NULL;
       }
       if (ch == 's' or ch == '0') return new PauseNote(length());
       ++count[ch];
