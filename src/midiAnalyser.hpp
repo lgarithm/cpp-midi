@@ -21,12 +21,12 @@ public:
 	      << std::endl;
 
     for (int track_id=0; track_id < head.ntrks; ++track_id) {
-      std::cout << "track " << track_id + 1
+      std::cout << "track "     << track_id + 1
 		<< ", length: " << tracks[track_id].length
 		<< std::endl;
 
       int count = 0;
-      for (auto &it : tracks[track_id].events)
+      for (auto &it : tracks[track_id].get_events())
 	std::cout << std::setw(5) << ++count << ": "
 		  << it->to_text()
 		  << std::endl;

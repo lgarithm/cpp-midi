@@ -63,7 +63,7 @@ private:
     bool first_chunk = true;
 
     while (file.tellg() != end_pos) {
-      midi_chunk chunk;
+      midi_chunk chunk(0);
       if (!file.read((char*) &chunk, 8)) return false;
       if (first_chunk) {
 	first_chunk = false;

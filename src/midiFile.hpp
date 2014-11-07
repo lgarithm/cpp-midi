@@ -13,6 +13,8 @@ struct midi_chunk
   char          magic[4];
   unsigned      length;
 
+  midi_chunk(unsigned length): length(length) {}
+
   void write(std::ofstream &file) const
   {
     file.write(magic, 4);
@@ -28,13 +30,9 @@ struct midi_head : public midi_chunk
   unsigned short        ntrks;
   unsigned short        division;
 
-  midi_head()
+  midi_head(): midi_chunk(6), format(0), ntrks(0), division(960)
   {
     strncpy(magic, "MThd", 4);
-    length = 6;
-    format = 0;
-    ntrks = 0;
-    division = 960;
   }
 
   void write(std::ofstream &file) const
@@ -58,11 +56,9 @@ struct midi_head : public midi_chunk
 class midi_track : public midi_chunk
 {
 public:
-  midi_track()
+  midi_track(): midi_chunk(0), set_end_of_track(false)
   {
     strncpy(magic, "MTrk", 4);
-    length = 0;
-    set_end_of_track = false;
   }
 
   void write(std::ofstream &file)
@@ -93,11 +89,16 @@ public:
     }
   }
 
-  std::list<event*> events;
+  std::list<event*> get_events() const
+  {
+    return events;
+  }
 
 private:
+  std::list<event*> events;
   bool set_end_of_track;
 };
+
 
 midi_track midi_control_track()
 {
@@ -107,6 +108,7 @@ midi_track midi_control_track()
   track.add_event(new time_signature(0x04, 0x02, 0x02, 0x08));
   return track;
 }
+
 
 class midiFile
 {
