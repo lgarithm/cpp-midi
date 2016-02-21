@@ -1,3 +1,2 @@
-
 build:
 	cd src && make
