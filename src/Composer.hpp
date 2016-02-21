@@ -1,8 +1,10 @@
-
 #ifndef __COMPOSER_HPP__
 #define __COMPOSER_HPP__
 
+#include <algorithm>
 #include <iostream>
+#include <iterator>
+
 #include "midiFile.hpp"
 #include "Sequence.hpp"
 
@@ -22,29 +24,29 @@ public:
     std::list<std::string> ss;
     std::string buffer;
 
-    for_each(std::istream_iterator<char>(in),
-	     std::istream_iterator<char>(),
-	     [&](char ch){
-	       if (ch == '$') {
-		 ss.push_back(buffer);
-		 buffer.clear();
-	       }
-	       else {
-		 buffer.push_back(ch);
-	       }
-	     });
+    std::for_each(std::istream_iterator<char>(in),
+   		  std::istream_iterator<char>(),
+		  [&](char ch){
+		    if (ch == '$') {
+		      ss.push_back(buffer);
+		      buffer.clear();
+		    }
+		    else {
+		      buffer.push_back(ch);
+		    }
+		  });
     if (!buffer.empty()) ss.push_back(buffer);
-
+    
     midiFile midi;
     midi.add_track(midi_control_track(bpm));
-
+    
     int tc = 0;
     for (auto it : ss) {
       midi.add_track(Sequence(it).to_track(tc++));
     }
     return midi;
   }
-
+  
 private:
   unsigned char bpm;
 };
