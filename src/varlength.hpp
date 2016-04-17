@@ -1,8 +1,6 @@
 #ifndef __VARLENGTH_HPP__
 #define __VARLENGTH_HPP__
 
-#include <vector>
-
 unsigned char* write_variable_length(unsigned value, unsigned char *&p)
 {
   unsigned buffer;
@@ -60,6 +58,5 @@ unsigned read_variable_length(const unsigned char *&p)
 
   return value;
 }
-
 
 #endif
