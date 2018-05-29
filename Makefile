@@ -1,7 +1,9 @@
-build:
-	cd src && make
+binary:
+	mkdir -p bin
+	g++ -std=c++0x src/midi.cpp -o bin/midi
+
 test:
 	./bin/midi
-install: build
-	mkdir -p ~/bin
-	cp bin/midi ~/bin
+
+install: binary
+	install -v bin/midi ~/local/bin/

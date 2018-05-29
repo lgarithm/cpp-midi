@@ -4,9 +4,9 @@
 #include <fstream>
 #include <iostream>
 #include <list>
+#include <stdexcept>
 #include <vector>
 
-#include "Exception.hpp"
 #include "Trace.hpp"
 #include "byte.hpp"
 #include "event.hpp"
@@ -19,9 +19,12 @@ class midiFileReader
     midiFile read(std::string filepath)
     {
         std::ifstream file(filepath.c_str(), std::ios::in | std::ios::binary);
-        if (not file) throw Exception("can not open file exception.");
-        if (not check_midi_file(file))
-            throw Exception("bad midi file exception.");
+        if (not file) {
+            throw std::runtime_error("can not open file exception.");
+        }
+        if (not check_midi_file(file)) {
+            throw std::runtime_error("bad midi file exception.");
+        }
         file.seekg(0, std::ios::beg);
 
         midi_head head;
@@ -104,8 +107,10 @@ class midiFileReader
             unsigned delta_time = read_variable_length(p);
             bool running = false;
             p[0] < 0x80 ? running = true : status_byte = *p++;
-            if (status_byte < 0x80)
-                throw Exception("status byte exception 1: status byte < 0x80.");
+            if (status_byte < 0x80) {
+                throw std::invalid_argument(
+                    "status byte exception 1: status byte < 0x80.");
+            }
 
             event *e = NULL;
             switch (status_byte) {
@@ -165,8 +170,9 @@ class midiFileReader
             break;
 
         default:
-            throw Exception("status byte exception 2: unknown status byte "
-                            "0xF[12345689ABCDE] exception.");
+            throw std::invalid_argument(
+                "status byte exception 2: unknown status byte "
+                "0xF[12345689ABCDE] exception.");
             break;
         }
 

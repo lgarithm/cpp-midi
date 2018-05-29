@@ -1,7 +1,8 @@
 #include <cstdio>
+#include <iostream>
+#include <stdexcept>
 
 #include "Composer.hpp"
-#include "Exception.hpp"
 #include "midiAnalyser.hpp"
 #include "midiFile.hpp"
 #include "midiFileReader.hpp"
@@ -31,8 +32,9 @@ int main(int argc, char *argv[])
         try {
             midiFile mfile = reader.read(argv[2]);
             analyser.analyse(mfile);
-        } catch (Exception e) {
-            e.print();
+        } catch (const std::exception &e) {
+            std::cout << e.what() << std::endl;
+            return 1;
         }
 
         return 0;
