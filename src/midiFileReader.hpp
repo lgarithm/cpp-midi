@@ -1,6 +1,4 @@
-
-#ifndef __MIDIFILEREADER_HPP__
-#define __MIDIFILEREADER_HPP__
+#pragma once
 
 #include <cstdlib>
 #include <fstream>
@@ -262,5 +260,3 @@ class midiFileReader
         return e;
     }
 };
-
-#endif
