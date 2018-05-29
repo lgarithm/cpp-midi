@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     }
 
     if (strcmp(argv[1], "-c") == 0) {
-        Composer composer;
+        Composer composer(56);
         midiFile midi = composer.compose();
         midi.write_file("sample.mid");
 

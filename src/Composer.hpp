@@ -10,7 +10,7 @@
 class Composer
 {
   public:
-    Composer(unsigned char bpm = 120) : bpm(bpm) {}
+    Composer(unsigned char bpm) : bpm(bpm) {}
 
     midiFile compose(const char *filename)
     {
@@ -43,5 +43,5 @@ class Composer
     }
 
   private:
-    unsigned char bpm;
+    const unsigned char bpm;
 };
