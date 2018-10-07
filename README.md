@@ -33,3 +33,21 @@ Table of note modifiers:
 | x2 interval             | ^     | ]      |
 | /2 interval             | _     | [      |
 | x(2 - (1/2)^n) interval | .     |        |
+
+## Export MP3
+
+On OSX, GarageBand can be used.
+
+On Linux, timidity can be used.
+
+```bash
+apt install -y lame timidity
+```
+
+```bash
+midi2mp3() {
+    timidity "$1" -Ow -o - | lame - -b 64 "$1".mp3
+}
+
+# midi2mp3 <filename>
+```
