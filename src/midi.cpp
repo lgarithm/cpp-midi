@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
         printf("\t%s -a <filename>\n", argv[0]);
         printf("\t%s -c\n", argv[0]);
         printf("Note:\n");
-        printf("\t-c, create sample.mid file from standard input\n");
+        printf("\t-c [-b <bpm>], create sample.mid file from standard input\n");
         printf("\t-a, analysis .mid file\n");
         return 0;
     }
@@ -41,7 +41,11 @@ int main(int argc, char *argv[])
     }
 
     if (strcmp(argv[1], "-c") == 0) {
-        Composer composer(56);
+        int bpm = 56;
+        if (argc > 3 && strcmp(argv[2], "-b") == 0) {
+            sscanf(argv[3], "%d", &bpm);
+        }
+        Composer composer(bpm);
         midiFile midi = composer.compose();
         midi.write_file("sample.mid");
 
