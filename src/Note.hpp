@@ -77,22 +77,27 @@ class NoteReader
     NoteReader(const std::string &s)
         : buffer(s), iter(buffer.begin()), buffer_end(buffer.end())
     {
-        for (char ch : "[]<>!?") count[ch] = 0;
+        for (char ch : "[]<>!?")
+            count[ch] = 0;
     }
 
     Note *get_note()
     {
-        for (char ch : "-+b#_^.") count[ch] = 0;
+        for (char ch : "-+b#_^.:")
+            count[ch] = 0;
         while (iter != buffer_end) {
             char ch = *iter++;
-            if (ch == '$') return NULL;
+            if (ch == '$')
+                return NULL;
             if ('1' <= ch && ch <= '7') {
                 int p = pitch(ch);
-                if (0 <= p and p <= 127) return new MusicNote(length(), p);
+                if (0 <= p and p <= 127)
+                    return new MusicNote(length(), p);
                 fprintf(stderr, "Bad note, out of range!\n");
                 return NULL;
             }
-            if (ch == 's' or ch == '0') return new PauseNote(length());
+            if (ch == 's' or ch == '0')
+                return new PauseNote(length());
             ++count[ch];
         }
         return NULL;
@@ -110,7 +115,10 @@ class NoteReader
     {
         int shift = count['^'] - count['_'] - count['['] + count[']'];
         int length = shift > 0 ? midi::beat << shift : midi::beat >> -shift;
-        for (int x = length >> 1; count['.']-- > 0; x >>= 1) length += x;
+        for (int x = length >> 1; count['.']-- > 0; x >>= 1)
+            length += x;
+        for (int x = length >> 2; count[':']-- > 0; x >>= 2)
+            length += x;
         return length;
     }
 

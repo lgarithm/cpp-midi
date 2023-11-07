@@ -33,6 +33,7 @@ Table of note modifiers:
 | x2 interval             | ^     | ]      |
 | /2 interval             | _     | [      |
 | x(2 - (1/2)^n) interval | .     |        |
+| x(1 + 1/4 + ...)        | :     |        |
 
 ## Export MP3
 
