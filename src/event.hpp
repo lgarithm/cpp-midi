@@ -5,6 +5,8 @@
 #include "midi.hpp"
 #include "varlength.hpp"
 
+#define FMT(buf, ...) std::snprintf(buf, sizeof(buf), __VA_ARGS__)
+
 class event
 {
   public:
@@ -58,7 +60,8 @@ class unary_midi_event : public midi_event
         unsigned char byte[8];
         unsigned char *p = byte;
         write_variable_length(delta_time, p);
-        if (not running) *p++ = get_status_byte() | (channel & 0x0F);
+        if (not running)
+            *p++ = get_status_byte() | (channel & 0x0F);
         *p++ = parameter;
         return std::string(byte, p);
     };
@@ -91,7 +94,8 @@ class binary_midi_event : public midi_event
         unsigned char byte[8];
         unsigned char *p = byte;
         write_variable_length(delta_time, p);
-        if (not running) *p++ = get_status_byte() | (channel & 0x0F);
+        if (not running)
+            *p++ = get_status_byte() | (channel & 0x0F);
         *p++ = first_parameter;
         *p++ = second_parameter;
         return std::string(byte, p);
@@ -130,10 +134,10 @@ class note_off : public binary_midi_event
     std::string to_text() const
     {
         char str[260];
-        sprintf(str,
-                "(%c)DT: %5d,   chan: 0x%02X,   note %3d(%3s) off,   velo: %3d",
-                running ? 'r' : '*', delta_time, channel, first_parameter,
-                note_name[first_parameter], second_parameter);
+        FMT(str,
+            "(%c)DT: %5d,   chan: 0x%02X,   note %3d(%3s) off,   velo: %3d",
+            running ? 'r' : '*', delta_time, channel, first_parameter,
+            note_name[first_parameter], second_parameter);
         return str;
     }
 
@@ -160,10 +164,10 @@ class note_on : public binary_midi_event
     std::string to_text() const
     {
         char str[260];
-        sprintf(str,
-                "(%c)DT: %5d,   chan: 0x%02X,   note %3d(%3s)  on,   velo: %3d",
-                running ? 'r' : '*', delta_time, channel, first_parameter,
-                note_name[first_parameter], second_parameter);
+        FMT(str,
+            "(%c)DT: %5d,   chan: 0x%02X,   note %3d(%3s)  on,   velo: %3d",
+            running ? 'r' : '*', delta_time, channel, first_parameter,
+            note_name[first_parameter], second_parameter);
         return str;
     }
 
@@ -207,9 +211,9 @@ class controller : public binary_midi_event
     std::string to_text()
     {
         char str[260];
-        sprintf(str, "(%c)DT: %5d,   chan: 0x%02X,   ctl %3d,   value: %3d",
-                running ? 'r' : '*', delta_time, channel, first_parameter,
-                second_parameter);
+        FMT(str, "(%c)DT: %5d,   chan: 0x%02X,   ctl %3d,   value: %3d",
+            running ? 'r' : '*', delta_time, channel, first_parameter,
+            second_parameter);
         return str;
     }
 
@@ -235,8 +239,7 @@ class program_change : public unary_midi_event
     std::string to_text() const
     {
         char str[260];
-        sprintf(
-            str,
+        FMT(str,
             "(%c)DT: %5d,   chan: 0x%02X,   program change, program number: %d",
             running ? 'r' : '*', delta_time, channel, parameter);
         return str;
@@ -296,7 +299,8 @@ class sysex_event : public event  // 0xF0, 0xF7
         unsigned char *p = byte;
 
         write_variable_length(delta_time, p);
-        if (not running) *p++ = get_status_byte();
+        if (not running)
+            *p++ = get_status_byte();
         unsigned length = data.size();
         write_variable_length(length, p);
 
@@ -369,7 +373,8 @@ class meta_event : public event
         unsigned char *p = byte;
 
         write_variable_length(delta_time, p);
-        if (not running) *p++ = get_status_byte();
+        if (not running)
+            *p++ = get_status_byte();
         *p++ = get_type();
         write_variable_length(get_length(), p);
 
@@ -379,10 +384,9 @@ class meta_event : public event
     std::string to_text() const
     {
         char str[260];
-        sprintf(str,
-                "(%c)DT: %5d,   meta event,   type: 0x%02X(%s),   length: %d",
-                running ? 'r' : '*', delta_time, get_type(),
-                meta_event_type_name[get_type()], get_length());
+        FMT(str, "(%c)DT: %5d,   meta event,   type: 0x%02X(%s),   length: %d",
+            running ? 'r' : '*', delta_time, get_type(),
+            meta_event_type_name[get_type()], get_length());
         return str;
     }
 
@@ -556,8 +560,8 @@ class end_of_track : public meta_event
     std::string to_text() const
     {
         char str[260];
-        sprintf(str, "(%c)DT: %5d,   meta event,   end of track",
-                running ? 'r' : '*', delta_time);
+        FMT(str, "(%c)DT: %5d,   meta event,   end of track",
+            running ? 'r' : '*', delta_time);
         return str;
     }
 
@@ -589,10 +593,9 @@ class set_tempo : public meta_event
     std::string to_text()
     {
         char str[260];
-        sprintf(str,
-                "(%c)DT: %5d,   meta event,   type: 0x%02X(%s),   MPQN: %d",
-                running ? 'r' : '*', delta_time, get_type(),
-                meta_event_type_name[get_type()], get_MPQN());
+        FMT(str, "(%c)DT: %5d,   meta event,   type: 0x%02X(%s),   MPQN: %d",
+            running ? 'r' : '*', delta_time, get_type(),
+            meta_event_type_name[get_type()], get_MPQN());
         return str;
     }
 
@@ -652,11 +655,11 @@ class time_signature : public meta_event
     std::string to_text() const
     {
         char str[260];
-        sprintf(str,
-                "(%c)DT: %5d,   meta event,   type: 0x%02X(%s),  [%02X %02X "
-                "%02X %02X]",
-                running ? 'r' : '*', delta_time, get_type(),
-                meta_event_type_name[get_type()], numer, denom, denom, _32nds);
+        FMT(str,
+            "(%c)DT: %5d,   meta event,   type: 0x%02X(%s),  [%02X %02X "
+            "%02X %02X]",
+            running ? 'r' : '*', delta_time, get_type(),
+            meta_event_type_name[get_type()], numer, denom, denom, _32nds);
         return str;
     }
 
@@ -686,11 +689,11 @@ class key_signature : public meta_event
     std::string to_text() const
     {
         char str[260];
-        sprintf(str,
-                "(%c)DT: %5d,   meta event,   type: 0x%02X(%s),   key: %d,   "
-                "scale: %d",
-                running ? 'r' : '*', delta_time, get_type(),
-                meta_event_type_name[get_type()], key, scale);
+        FMT(str,
+            "(%c)DT: %5d,   meta event,   type: 0x%02X(%s),   key: %d,   "
+            "scale: %d",
+            running ? 'r' : '*', delta_time, get_type(),
+            meta_event_type_name[get_type()], key, scale);
         return str;
     }
 
